@@ -1,0 +1,1378 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>网抑云人格工伤鉴定报告</title>
+  <style>
+    :root {
+      --bg: #f6faf6;
+      --panel: #ffffff;
+      --text: #1e2a22;
+      --muted: #6a786f;
+      --line: #dbe8dd;
+      --soft: #edf6ef;
+      --accent: #6c8d71;
+      --accent-strong: #4d6a53;
+      --shadow: 0 16px 40px rgba(47, 73, 55, 0.08);
+      --radius: 22px;
+    }
+
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+      background:
+        radial-gradient(circle at top left, #f8fff8 0, #f6faf6 36%, #f2f7f3 100%);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    .shell {
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 24px 16px 56px;
+    }
+
+    .card {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+
+    .hero {
+      padding: 28px;
+      margin-top: 20px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      right: -60px;
+      top: -60px;
+      width: 180px;
+      height: 180px;
+      border-radius: 50%;
+      background: linear-gradient(180deg, rgba(127,165,134,0.16), rgba(127,165,134,0.02));
+      pointer-events: none;
+    }
+
+    h1, h2, h3, p { margin: 0; }
+    .hero h1 {
+      font-size: clamp(28px, 5vw, 48px);
+      line-height: 1.08;
+      letter-spacing: -0.03em;
+      max-width: 680px;
+    }
+    .hero .sub {
+      margin-top: 14px;
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1.75;
+      max-width: 720px;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 22px;
+    }
+    .hero-minimal {
+      min-height: 48vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 42px 20px;
+    }
+    .hero-minimal::after { display: none; }
+
+    button {
+      border: 0;
+      cursor: pointer;
+      transition: transform .16s ease, box-shadow .16s ease, opacity .16s ease;
+      font: inherit;
+    }
+
+    button:hover { transform: translateY(-1px); }
+    button:disabled { cursor: not-allowed; opacity: 0.55; transform: none; }
+
+    .btn-primary {
+      background: var(--accent-strong);
+      color: #fff;
+      padding: 14px 20px;
+      border-radius: 14px;
+      box-shadow: 0 12px 30px rgba(77, 106, 83, 0.18);
+      font-weight: 700;
+    }
+
+    .btn-secondary {
+      background: #fff;
+      color: var(--accent-strong);
+      padding: 14px 20px;
+      border-radius: 14px;
+      border: 1px solid var(--line);
+      font-weight: 700;
+    }
+
+    .screen { display: none; }
+    .screen.active { display: block; }
+
+    .test-wrap,
+    .result-wrap {
+      margin-top: 22px;
+      padding: 22px;
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 18px;
+      flex-wrap: wrap;
+    }
+
+    .progress {
+      flex: 1;
+      min-width: 240px;
+      height: 10px;
+      background: #edf3ee;
+      border-radius: 999px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .progress > span {
+      display: block;
+      width: 0;
+      height: 100%;
+      background: linear-gradient(90deg, #97b59c, #5b7a62);
+      border-radius: inherit;
+      transition: width .22s ease;
+    }
+
+    .progress-text {
+      color: var(--muted);
+      font-size: 13px;
+      white-space: nowrap;
+    }
+
+    .question-list {
+      display: grid;
+      gap: 16px;
+    }
+
+    .question {
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 18px;
+      background: linear-gradient(180deg, #ffffff, #fbfdfb);
+    }
+
+    .question-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 10px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      border-radius: 999px;
+      padding: 6px 10px;
+      background: var(--soft);
+      border: 1px solid var(--line);
+    }
+
+    .question-title {
+      font-size: 16px;
+      line-height: 1.7;
+      white-space: pre-wrap;
+    }
+
+    .options {
+      display: grid;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .option {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 14px 14px;
+      border-radius: 14px;
+      border: 1px solid var(--line);
+      background: #fff;
+      transition: border-color .16s ease, background .16s ease, transform .16s ease;
+    }
+
+    .option:hover {
+      border-color: #bcd0c1;
+      background: #f8fcf9;
+    }
+
+    .option input {
+      margin-top: 3px;
+      accent-color: var(--accent-strong);
+      transform: scale(1.1);
+      flex-shrink: 0;
+    }
+
+    .option-code {
+      font-weight: 800;
+      color: var(--accent-strong);
+      min-width: 22px;
+    }
+
+    .actions-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 18px;
+      padding-top: 6px;
+    }
+
+    .hint {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.7;
+    }
+
+    .result-layout {
+      display: grid;
+      gap: 18px;
+    }
+    .result-top {
+      display: grid;
+      grid-template-columns: 0.9fr 1.1fr;
+      gap: 18px;
+      align-items: stretch;
+    }
+    .poster-box, .type-box, .analysis-box, .dim-box, .note-box {
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 18px;
+      background: linear-gradient(180deg, #ffffff, #fbfdfb);
+    }
+    .poster-box {
+      display: grid;
+      grid-template-rows: 1fr auto;
+      min-height: 280px;
+      overflow: hidden;
+      position: relative;
+      background:
+        radial-gradient(circle at top right, rgba(127,165,134,0.16), rgba(127,165,134,0) 40%),
+        linear-gradient(180deg, #ffffff, #f7fbf8);
+    }
+    .poster-box::after {
+      content: "";
+      position: absolute;
+      right: -46px;
+      bottom: -46px;
+      width: 140px;
+      height: 140px;
+      border-radius: 50%;
+      background: linear-gradient(180deg, rgba(127,165,134,0.12), rgba(127,165,134,0.01));
+      pointer-events: none;
+    }
+    .poster-image {
+      width: 100%;
+      min-height: 220px;
+      max-height: 460px;
+      object-fit: contain;
+      border-radius: 18px;
+      background: rgba(255,255,255,0.75);
+      position: relative;
+      z-index: 1;
+    }
+    .poster-box.no-image .poster-image { display: none; }
+    .poster-caption {
+      margin-top: 14px;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.8;
+      position: relative;
+      z-index: 1;
+    }
+    .type-kicker {
+      font-size: 12px;
+      color: var(--accent-strong);
+      margin-bottom: 8px;
+      letter-spacing: .06em;
+    }
+    .type-name {
+      font-size: clamp(30px, 5vw, 48px);
+      line-height: 1.08;
+      letter-spacing: -0.03em;
+    }
+    .type-subname {
+      margin-top: 10px;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.8;
+    }
+    .match {
+      margin-top: 18px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      border-radius: 999px;
+      padding: 10px 14px;
+      background: var(--soft);
+      border: 1px solid var(--line);
+      color: var(--accent-strong);
+      font-weight: 700;
+      font-size: 14px;
+      line-height: 1.4;
+    }
+    .analysis-box h3, .dim-box h3, .note-box h3 {
+      font-size: 16px;
+      margin-bottom: 12px;
+    }
+    .analysis-box p {
+      margin: 0;
+      color: #304034;
+      font-size: 15px;
+      line-height: 1.9;
+      white-space: pre-wrap;
+    }
+    .dim-list {
+      display: grid;
+      gap: 12px;
+    }
+    .dim-item {
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 14px;
+      background: #fff;
+    }
+    .dim-item-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 10px;
+      margin-bottom: 8px;
+      flex-wrap: wrap;
+    }
+    .dim-item-name {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text);
+    }
+    .dim-item-score {
+      color: var(--accent-strong);
+      font-weight: 800;
+      font-size: 14px;
+      white-space: nowrap;
+    }
+    .dim-item p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.8;
+    }
+    .note-box p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.8;
+    }
+
+    .author-box {
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: linear-gradient(180deg, #ffffff, #fbfdfb);
+      overflow: hidden;
+    }
+    .author-box summary {
+      list-style: none;
+      cursor: pointer;
+      padding: 18px;
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .author-box summary::-webkit-details-marker { display: none; }
+    .author-box summary::after {
+      content: '展开';
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--accent-strong);
+      border: 1px solid var(--line);
+      background: var(--soft);
+      padding: 6px 10px;
+      border-radius: 999px;
+      flex-shrink: 0;
+    }
+    .author-box[open] summary::after {
+      content: '收起';
+    }
+    .author-content {
+      border-top: 1px solid var(--line);
+      padding: 0 18px 18px;
+    }
+    .author-content p {
+      margin: 14px 0 0;
+      color: #304034;
+      font-size: 14px;
+      line-height: 1.9;
+    }
+
+    .result-actions {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 22px;
+    }
+
+    @media (max-width: 860px) {
+      .result-top { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 600px) {
+      .shell { padding: 14px 12px 42px; }
+      .hero, .test-wrap, .result-wrap { padding: 16px; }
+      .hero h1 { font-size: 32px; }
+      .question-title { font-size: 15px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <section id="intro" class="screen active">
+      <div class="hero card hero-minimal">
+        <h1>网抑云人格工伤鉴定报告</h1>
+        <p class="sub">戴上耳机的那一刻，你的工伤就开始了。</p>
+        <div class="hero-actions">
+          <button id="startBtn" class="btn-primary">开始鉴定</button>
+        </div>
+        <div style="padding-top: 2rem; display: flex; flex-direction: column;">
+          <span style="color: var(--muted); font-size: 12px;">基于SBTI算法架构改造</span>
+        </div>
+      </div>
+    </section>
+
+    <section id="test" class="screen">
+      <div class="test-wrap card">
+        <div class="topbar">
+          <div class="progress"><span id="progressBar"></span></div>
+          <div class="progress-text" id="progressText">0 / 26</div>
+        </div>
+
+        <div id="questionList" class="question-list"></div>
+
+        <div class="actions-bottom">
+          <div class="hint" id="testHint">全选完才会放行。工伤鉴定要完整。</div>
+          <div style="display:flex; gap:12px; flex-wrap:wrap;">
+            <button id="backIntroBtn" class="btn-secondary">返回首页</button>
+            <button id="submitBtn" class="btn-primary" disabled>提交并查看报告</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="result" class="screen">
+      <div class="result-wrap card">
+        <div class="result-layout">
+          <div class="result-top">
+            <div class="poster-box" id="posterBox">
+              <img id="posterImage" class="poster-image" alt="鉴定结果图" />
+              <div id="posterCaption" class="poster-caption">副歌依赖症晚期</div>
+            </div>
+
+            <div class="type-box">
+              <div class="type-kicker" id="resultModeKicker">您的工伤诊断</div>
+              <div class="type-name" id="resultTypeName">副歌依赖症晚期</div>
+              <div class="match" id="matchBadge">匹配度 92%</div>
+              <div class="type-subname" id="resultTypeSub">系统备注会显示在这里。</div>
+            </div>
+          </div>
+
+          <div class="analysis-box">
+            <h3>详细诊断报告</h3>
+            <p id="resultDesc"></p>
+          </div>
+
+          <div class="dim-box">
+            <h3>十二维度评分</h3>
+            <div id="dimList" class="dim-list"></div>
+          </div>
+
+          <div class="note-box">
+            <h3>友情提示</h3>
+            <p id="funNote">本测试仅供娱乐，别拿它当诊断、面试、相亲、分手、招魂、算命或人生判决书。</p>
+          </div>
+        </div>
+
+        <div class="result-actions">
+          <div style="display:flex; gap:12px; flex-wrap:wrap;">
+            <button id="restartBtn" class="btn-secondary">重新鉴定</button>
+            <button id="toTopBtn" class="btn-primary">回到首页</button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    const dimensionMeta = {
+      D1: { name: 'D1 听歌依赖度', model: '依赖模型' },
+      D2: { name: 'D2 循环成瘾性', model: '依赖模型' },
+      D3: { name: 'D3 平台忠诚度', model: '依赖模型' },
+      E1: { name: 'E1 情感投射深度', model: '情绪模型' },
+      E2: { name: 'E2 深夜emo指数', model: '情绪模型' },
+      E3: { name: 'E3 前任阴影残留', model: '情绪模型' },
+      O1: { name: 'O1 歌单管理强迫度', model: '秩序模型' },
+      O2: { name: 'O2 切歌冲动阈值', model: '秩序模型' },
+      O3: { name: 'O3 小众审美执念', model: '秩序模型' },
+      I1: { name: 'I1 现实沉浸偏差', model: '幻觉模型' },
+      I2: { name: 'I2 自我表演倾向', model: '幻觉模型' },
+      I3: { name: 'I3 歌词过度解读', model: '幻觉模型' }
+    };
+
+    const questions = [
+      {
+        id: 'q1', dim: 'D1',
+        text: '你出门忘带耳机了，此时你的心理状态最接近：',
+        options: [
+          { label: '没事，安静也挺好', value: 1 },
+          { label: '有点不习惯，但能忍', value: 2 },
+          { label: '立刻掉头回家拿，没有耳机我无法呼吸', value: 3 }
+        ]
+      },
+      {
+        id: 'q2', dim: 'D1',
+        text: '你每天戴耳机的时间大约是：',
+        options: [
+          { label: '1-2小时，偶尔听听', value: 1 },
+          { label: '3-5小时，通勤+工作时听', value: 2 },
+          { label: '除了睡觉和洗澡，耳机焊在耳朵上', value: 3 }
+        ]
+      },
+      {
+        id: 'q3', dim: 'D2',
+        text: '你发现自己喜欢的歌后，通常会：',
+        options: [
+          { label: '加入歌单，随机听到时再享受', value: 1 },
+          { label: '连续听几天，腻了就换', value: 2 },
+          { label: '单曲循环到室友/同事想报警，听到这首歌的每个音符都刻进DNA', value: 3 }
+        ]
+      },
+      {
+        id: 'q4', dim: 'D2',
+        text: '听一首歌时，副歌结束你的手指会：',
+        options: [
+          { label: '自然地等下一首', value: 1 },
+          { label: '有时候会拖回去再听一遍副歌', value: 2 },
+          { label: '不受控制地拖回副歌开头，循环5遍后才勉强放过这首歌', value: 3 }
+        ]
+      },
+      {
+        id: 'q5', dim: 'D3',
+        text: '你的手机里装了几个音乐APP？',
+        options: [
+          { label: '好几个，哪个有版权用哪个', value: 1 },
+          { label: '两个，一个主力一个备用', value: 2 },
+          { label: '只有网易云，其他APP下载了也没打开过，我的红心和歌单都在这里', value: 3 }
+        ]
+      },
+      {
+        id: 'q6', dim: 'D3',
+        text: '如果网易云突然宣布关闭服务器，你的第一反应是：',
+        options: [
+          { label: '换个APP呗，歌都差不多', value: 1 },
+          { label: '有点难过，毕竟用了很久', value: 2 },
+          { label: '天塌了。我那3000首红心、50个精心分类的歌单、500条走心评论……这不是关APP，这是烧我的精神遗产', value: 3 }
+        ]
+      },
+      {
+        id: 'q7', dim: 'E1',
+        text: '听到一首特别扎心的歌时，你通常会：',
+        options: [
+          { label: '觉得旋律不错，听完就过了', value: 1 },
+          { label: '有点感触，可能会单曲循环一会儿', value: 2 },
+          { label: '眼泪直接掉下来，感觉自己的人生被这首歌完整地唱了一遍', value: 3 }
+        ]
+      },
+      {
+        id: 'q8', dim: 'E1',
+        text: '你听歌时更关注什么？',
+        options: [
+          { label: '旋律和编曲，歌词随便听听', value: 1 },
+          { label: '旋律和歌词各占一半', value: 2 },
+          { label: '歌词。歌词就是我的日记本，每句话都在写我', value: 3 }
+        ]
+      },
+      {
+        id: 'q9', dim: 'E2',
+        text: '晚上11点以后，你的歌单会发生什么变化？',
+        options: [
+          { label: '和白天差不多，该听什么听什么', value: 1 },
+          { label: '可能会切换到稍微安静一点的歌', value: 2 },
+          { label: '自动切换到"深夜emo"歌单，陈奕迅、林宥嘉、薛之谦轮番上阵，枕头湿了也不关', value: 3 }
+        ]
+      },
+      {
+        id: 'q10', dim: 'E2',
+        text: '你在网易云评论区最常做的事是：',
+        options: [
+          { label: '偶尔看看热评，笑一笑就过了', value: 1 },
+          { label: '认真看评论，偶尔点赞', value: 2 },
+          { label: '从第一条刷到最后一条，两千楼的故事看完哭湿枕头，自己也写一段三千字的情感小作文', value: 3 }
+        ]
+      },
+      {
+        id: 'q11', dim: 'E3',
+        text: '日推里突然出现你和前任一起听过的歌，你会：',
+        options: [
+          { label: '没感觉，正常听完', value: 1 },
+          { label: '心里咯噔一下，但不会跳过', value: 2 },
+          { label: '瞬间破防，立刻切歌，但歌词已经在脑子里循环了，今晚注定失眠', value: 3 }
+        ]
+      },
+      {
+        id: 'q12', dim: 'E3',
+        text: '你有没有因为一首歌而想起某个人，然后情绪崩溃？',
+        options: [
+          { label: '没有，歌就是歌', value: 1 },
+          { label: '偶尔会有点感触', value: 2 },
+          { label: '何止一首歌？我的整个歌单都是按"前任编年史"排列的', value: 3 }
+        ]
+      },
+      {
+        id: 'q13', dim: 'O1',
+        text: '你的歌单数量和分类方式是：',
+        options: [
+          { label: '几个大歌单，够用就行', value: 1 },
+          { label: '十几个歌单，按心情/场景分了类', value: 2 },
+          { label: '50+歌单，每个都有严格命名规范，"深夜独处·雨天·第三类情绪·不允许在白天打开"这种级别', value: 3 }
+        ]
+      },
+      {
+        id: 'q14', dim: 'O1',
+        text: '点红心之前你会犹豫吗？',
+        options: [
+          { label: '觉得好听就点，不纠结', value: 1 },
+          { label: '会想一下"这首歌配不配"', value: 2 },
+          { label: '必须经过三轮审核：初听→二刷→三品，确认这首歌能进我的"灵魂歌单"才郑重点下红心，点错了还会取消', value: 3 }
+        ]
+      },
+      {
+        id: 'q15', dim: 'O2',
+        text: '一首歌的前奏你通常能忍多久？',
+        options: [
+          { label: '听完前奏再决定', value: 1 },
+          { label: '5秒内判断要不要继续', value: 2 },
+          { label: '前3秒没有hook直接切，前奏超过10秒没人声手指已经不受控制了', value: 3 }
+        ]
+      },
+      {
+        id: 'q16', dim: 'O2',
+        text: '一首歌的高潮部分结束后，你的大拇指会：',
+        options: [
+          { label: '等它自然结束', value: 1 },
+          { label: '看心情，有时候切有时候不切', value: 2 },
+          { label: '高潮结束0.1秒内完成切歌，绝不给尾奏任何面子', value: 3 }
+        ]
+      },
+      {
+        id: 'q17', dim: 'O3',
+        text: '你私藏的宝藏歌曲突然在抖音火了，你的反应是：',
+        options: [
+          { label: '挺好的，更多人能听到', value: 1 },
+          { label: '有点复杂，高兴又有点失落', value: 2 },
+          { label: '强烈的"被绿"感。这首歌是我的，你们不配。评论破999+的那天，我在评论区写了一篇"悼文"', value: 3 }
+        ]
+      },
+      {
+        id: 'q18', dim: 'O3',
+        text: '你会因为什么原因拒绝听一首歌？',
+        options: [
+          { label: '基本不会拒绝，好听就行', value: 1 },
+          { label: '实在太难听才会', value: 2 },
+          { label: '封面太丑、歌手太火、评论太少、风格太主流……理由可以写一本书', value: 3 }
+        ]
+      },
+      {
+        id: 'q19', dim: 'I1',
+        text: '戴上耳机走在路上，你的世界会发生什么变化？',
+        options: [
+          { label: '就是加了背景音乐，没什么特别的', value: 1 },
+          { label: '确实会有点沉浸，走路带风', value: 2 },
+          { label: '楼道变T台，地铁变末日战场，便利店变日剧片场，我已经不是在走路了，我是在拍MV', value: 3 }
+        ]
+      },
+      {
+        id: 'q20', dim: 'I1',
+        text: '"本来只想睡前听两首歌"，实际结果是：',
+        options: [
+          { label: '真的只听两首就睡了', value: 1 },
+          { label: '可能会多听几首，但一小时内能睡', value: 2 },
+          { label: '回过神来天亮了，手机没电了，歌单循环了三遍，上班迟到了', value: 3 }
+        ]
+      },
+      {
+        id: 'q21', dim: 'I2',
+        text: '听到一首节奏感很强的歌时，你的身体会：',
+        options: [
+          { label: '轻轻点头打节拍', value: 1 },
+          { label: '身体会跟着晃动', value: 2 },
+          { label: '空气吉他、空气鼓槌、空气麦克风全部就位，虽然没有观众但我的表演是格莱美级别的', value: 3 }
+        ]
+      },
+      {
+        id: 'q22', dim: 'I2',
+        text: '洗澡时听歌，你的状态是：',
+        options: [
+          { label: '正常洗澡，歌当背景', value: 1 },
+          { label: '会跟着哼几句', value: 2 },
+          { label: '周杰伦/陈奕迅附体，浴室就是我的演唱会主场，邻居投诉也无所谓，今晚我是王', value: 3 }
+        ]
+      },
+      {
+        id: 'q23', dim: 'I3',
+        text: '你有没有觉得某首歌的歌词"就是在写我"？',
+        options: [
+          { label: '没有，歌词就是歌词', value: 1 },
+          { label: '偶尔有共鸣', value: 2 },
+          { label: '不是"觉得"，是"确信"。作词人一定在我的房间装了监控，否则怎么解释每句话都在精准描述我的人生', value: 3 }
+        ]
+      },
+      {
+        id: 'q24', dim: 'I3',
+        text: '你在商场/咖啡厅听到BGM时，你的反应是：',
+        options: [
+          { label: '没什么反应，当背景音', value: 1 },
+          { label: '可能会注意一下是什么歌', value: 2 },
+          { label: '0.5秒内掏出手机打开听歌识曲，识别成功后还要看一眼评论区确认"果然不止我一个人觉得这首歌牛"', value: 3 }
+        ]
+      }
+    ];
+
+    const specialQuestions = [
+      {
+        id: 'wy_gate_q1',
+        special: true,
+        kind: 'wy_gate',
+        text: '你使用网易云音乐多少年了？',
+        options: [
+          { label: '不到3年', value: 1 },
+          { label: '3-7年', value: 2 },
+          { label: '8年以上', value: 3 }
+        ]
+      },
+      {
+        id: 'wy_gate_q2',
+        special: true,
+        kind: 'wy_trigger',
+        text: '以下哪个场景最能描述你的深夜状态？',
+        options: [
+          { label: '到点就睡，作息规律', value: 1 },
+          { label: '偶尔熬夜，但不算严重', value: 2 },
+          { label: '每天23:00准时emo，网易云评论区是我的深夜食堂，哭完才睡', value: 3 }
+        ]
+      }
+    ];
+
+    const TYPE_LIBRARY = {
+      "CHORUS": {
+        "code": "CHORUS",
+        "cn": "副歌依赖症晚期",
+        "intro": "听一首歌必须拖回副歌再听一遍，否则浑身难受。",
+        "desc": "恭喜您，您已被确诊为\"副歌依赖症晚期\"。您的手指已经形成了一种条件反射——副歌结束的那一瞬间，大拇指会以0.08秒的反应速度精准地拖动进度条回到副歌开头。这不是你在控制手指，是副歌在控制你。\n\n您的音乐消费模式已经完全脱离了\"听一首完整的歌\"这个概念。对您来说，一首歌只由两部分组成：副歌，和\"等待副歌的那段无聊时间\"。前奏？跳过。主歌？跳过。桥段？什么桥段？我只知道副歌。\n\n据临床观察，副歌依赖症晚期患者平均每首歌只会完整听完副歌部分，其余段落一律被视为\"广告时间\"。您不是在听歌，您是在反复品尝一道菜里最好吃的那一口，然后把整盘菜推到一边。\n\n医嘱：建议尝试完整听完一首歌，包括前奏和尾奏。如果感到不适，请深呼吸，并反复默念\"主歌也是有感情的\"。"
+      },
+      "LIVE": {
+        "code": "LIVE",
+        "cn": "颅内混响重度成瘾",
+        "intro": "只听Live版和演唱会版，听见掌声和尖叫颅内才会高潮。",
+        "desc": "您已被确诊为\"颅内混响重度成瘾\"。在您的音乐世界里，录音室版本就是\"被阉割的平替\"，只有Live版才是真正的音乐。您对掌声、尖叫声、观众大合唱有着近乎病态的渴求——那些混响、回声、即兴改编，才是让您的颅内多巴胺疯狂分泌的真正配方。\n\n当一首歌的Live版前奏响起，观众席传来第一声欢呼时，您的瞳孔会放大，心率会加速，后背会起鸡皮疙瘩。这种感觉，录音室版本永远给不了您。\n\n您收藏夹里的歌，十个有八个标注着\"(Live)\"。如果一首歌只有录音室版本，您会觉得它\"没有灵魂\"。您甚至会在安静的环境下假装自己身处演唱会现场，闭上眼睛，让那些掌声和尖叫声将您包围。\n\n医嘱：偶尔听听录音室版本，体会一下\"干净的声音\"也是一种美。如果戒断反应严重，建议观看演唱会视频作为替代疗法。"
+      },
+      "UMBILICAL": {
+        "code": "UMBILICAL",
+        "cn": "耳机线脐带综合症",
+        "intro": "耳机一摘，感觉失去了与母星的最后连接。",
+        "desc": "您已被确诊为\"耳机线脐带综合症\"。耳机对您而言，早已不是一件电子配件，而是一条连接您与精神母体的脐带。摘下耳机的那一刻，您会感到一种类似于\"新生儿被剪断脐带\"的恐慌——周围的声音突然变得刺耳、嘈杂、毫无美感，世界从4D降级成了2D。\n\n您在社交场合中，耳机就是您的\"请勿打扰\"标志。戴上耳机，您就进入了属于自己的结界，外界的嘈杂被隔绝在耳罩之外。摘下耳机，您就像一个被剥去外壳的软体动物，赤裸地暴露在这个过于喧嚣的世界中。\n\n临床数据显示，耳机脐带综合症患者出门忘带耳机的焦虑程度，与普通人忘带手机相当。部分重度患者甚至在睡觉时也不会摘下耳机，因为\"安静太可怕了\"。\n\n医嘱：建议每天尝试摘下耳机30分钟，感受一下真实世界的声音。如果出现心慌、手抖、幻听等症状，请立即重新戴上耳机并就医。"
+      },
+      "LOOP": {
+        "code": "LOOP",
+        "cn": "单曲循环强迫性重复障碍",
+        "intro": "一首emo神曲听到手机没电，听到耳朵起茧也不切。",
+        "desc": "您已被确诊为\"单曲循环强迫性重复障碍\"。当您锁定了一首\"命中注定的歌\"之后，您的播放列表就只剩下一首歌了。不是您不想切，是您切不了——就像被困在一个音乐的时间循环里，每天醒来，这首歌还在播放。\n\n您的单曲循环记录可以轻松突破100遍。室友已经从\"这首歌挺好听的\"进化到\"你再放这首歌我就报警\"。您的耳朵已经对这首歌的每一个音符形成了肌肉记忆，但您依然觉得\"下一遍可能会听出新的东西\"。\n\n最可怕的是，您并不觉得这有什么问题。在您看来，单曲循环不是病，是一种\"深度沉浸式音乐体验\"。别人听100首不同的歌，不如您把1首歌听100遍来得深刻。\n\n医嘱：强制设置\"每日单曲循环上限\"为50遍。超过后系统自动切换到下一首。如果出现\"新歌不配\"的想法，请立即停止循环并咨询音乐心理医生。"
+      },
+      "SHOWER": {
+        "code": "SHOWER",
+        "cn": "洗澡间世界巡回演唱会妄想症",
+        "intro": "洗澡时觉得自己是周杰伦/陈奕迅附体，邻居投诉也无所谓。",
+        "desc": "您已被确诊为\"洗澡间世界巡回演唱会妄想症\"。当花洒打开、水雾升腾、手机外放响起的那一刻，您的浴室就不再是浴室了——那是Madison Square Garden，那是东京巨蛋，那是您的世界巡演第108站。\n\n您在浴室里的表演是全方位的：高音部分会扯着嗓子嘶吼，深情部分会闭上眼睛仰头，间奏部分会假装和\"观众\"互动说\"大家好我是XX\"。您的浴室墙壁上全是水蒸气，但您看到的不是水雾，是舞台灯光和镭射。\n\n邻居已经投诉了三次，物业也来敲过两次门。但您不在乎。因为真正的艺术家，从来不会被世俗的噪音投诉所打倒。今晚，您的演唱会将继续。\n\n医嘱：建议购买防水蓝牙音箱以提升音质体验。如果邻居再次投诉，可考虑将演唱会迁移至KTV包间。请不要在浴室外继续表演，社会尚未准备好接受您的才华。"
+      },
+      "INTRO": {
+        "code": "INTRO",
+        "cn": "前奏过长引起的急性焦虑症",
+        "intro": "前奏超过10秒没人声，手指会不受控制地点\"下一首\"。",
+        "desc": "您已被确诊为\"前奏过长引起的急性焦虑症\"。在您的音乐世界里，前奏就是\"等待的折磨\"。10秒，是您的心理承受极限。超过这个时间还没有人声出现，您的手指就会像被某种神秘力量驱动一样，不受控制地滑向\"下一首\"按钮。\n\n您不理解为什么有人能耐心听完一段60秒的前奏。对您来说，前奏就像快递到了但不开箱，电影开始了但只放片头Logo——\"赶紧进入正题好吗？\"\n\n您的切歌记录中，有超过70%的切歌发生在前奏阶段。有些歌您甚至从来没有听过副歌，因为前奏就把您劝退了。您的音乐审美已经被训练成了一种\"3秒判断法\"——前3秒没有hook，直接下一个。\n\n医嘱：建议尝试\"前奏冥想训练\"，从20秒开始，逐步延长到能完整听完一首带前奏的歌。如果训练过程中出现手指抽搐，请立即切歌并休息。"
+      },
+      "SHUFFLE": {
+        "code": "SHUFFLE",
+        "cn": "随机播放信任危机",
+        "intro": "点了随机，但总觉得推荐的歌一点都不随机，甚至有点冒犯。",
+        "desc": "您已被确诊为\"随机播放信任危机\"。您和随机播放功能之间的关系，已经从\"信任\"恶化成了\"互相猜忌\"。您点了随机播放，但总觉得算法在针对您——为什么连着三首都是慢歌？为什么刚跳过一首又推了同歌手的？为什么我3000首歌的曲库里，随机播放永远在那50首里打转？\n\n您开始怀疑\"随机\"这个概念本身。您觉得算法一定有某种不可告人的偏好，或者它在偷偷学习您的切歌习惯然后故意反着来。您甚至想过\"如果我手动打乱歌单顺序，是不是比随机播放更随机？\"\n\n最让您崩溃的是，当您跟朋友吐槽\"随机播放不随机\"时，朋友会说\"是你自己的心理作用\"。但您知道，这不是心理作用，这是系统性的背叛。\n\n医嘱：接受随机播放的不完美本质。或者干脆放弃随机，手动选歌。如果您无法信任任何播放模式，建议考虑\"闭眼盲选法\"——闭着眼睛滑动歌单，手指停在哪首听哪首。"
+      },
+      "COMMENT": {
+        "code": "COMMENT",
+        "cn": "评论区PTSD重度患者",
+        "intro": "歌没听进去，评论区两千楼的故事看完哭湿了枕头。",
+        "desc": "您已被确诊为\"评论区PTSD重度患者\"。对您来说，一首歌只是入场券，真正的重头戏在评论区。您打开一首歌，第一件事不是听，而是划到评论区。两千楼的评论，您能从头刷到尾，每一条都不放过。\n\n您在评论区里看到了爱情、背叛、成长、遗憾、生死、重逢……这些故事比任何一部电影都精彩，比任何一本小说都真实。您为陌生人哭过、笑过、叹过气。有时候您甚至忘了自己最初是来听歌的。\n\n您的\"听歌\"流程是这样的：打开歌→划到评论区→开始阅读→被第一条热评击中→继续往下刷→被第37条评论弄哭→被第203条评论治愈→被第1589条评论再次击碎→凌晨3点发现歌还没开始放。\n\n医嘱：建议先听歌再看评论，或设置\"评论阅读时限\"为10分钟。如果发现自己在为素不相识的网友的人生哭泣，请关闭手机并深呼吸。"
+      },
+      "COPYPASTE": {
+        "code": "COPYPASTE",
+        "cn": "文案搬运工职业损伤",
+        "intro": "听歌不是为了听，是为了找一句能发朋友圈的扎心句子。",
+        "desc": "您已被确诊为\"文案搬运工职业损伤\"。您的听歌行为已经发生了一次根本性的范式转移——您不再是为了\"听\"而听歌，而是为了\"找\"而听歌。找什么？找一句能发朋友圈/微博/小红书的扎心文案。\n\n您的听歌流程是这样的：打开歌→快进到副歌→竖起耳朵捕捉歌词→听到一句\"还不错\"→截图/复制→发朋友圈配上一张模糊的夜景图→关掉歌→完成。\n\n您的朋友圈/微博已经成为了一个\"网易云歌词摘抄本\"。您的朋友们已经能通过您发的文案判断您最近在听什么歌。有人甚至开玩笑说：\"你不用听歌，你只需要看歌词。\"\n\n最讽刺的是，有些歌您发了文案但从来没有完整听完过。您传播了这首歌的灵魂，却从未真正与它相遇。\n\n医嘱：建议尝试\"纯粹听歌模式\"——不截图、不复制、不发朋友圈，只听。如果感到空虚，请理解：不是每首歌都需要被分享，有些感动只属于你一个人。"
+      },
+      "EXRADAR": {
+        "code": "EXRADAR",
+        "cn": "前任雷达异常灵敏症",
+        "intro": "日推里出现陶喆/蔡依林，就知道今天不宜出门。",
+        "desc": "您已被确诊为\"前任雷达异常灵敏症\"。您的音乐系统已经与您的情感记忆形成了一种高度敏感的联动机制——当随机播放或日推中出现与前任相关的歌曲时，您的\"前任雷达\"会在0.01秒内发出红色警报。\n\n您的大脑里有一个隐形的\"前任歌单数据库\"，收录了所有你们一起听过的歌、在KTV唱过的歌、对方分享给您的歌、分手后单曲循环过的歌。这个数据库不需要您主动调取，它会自动运行，24小时待命。\n\n当那首歌的前奏响起时，您的反应速度比任何AI都快：心率飙升→瞳孔放大→手指颤抖→切歌。但为时已晚，歌词已经在您脑子里开始循环了。今晚，注定又是一个不眠之夜。\n\n医嘱：建议进行\"脱敏训练\"——在安全环境下主动播放前任相关歌曲，逐步降低敏感度。如果训练过程中情绪失控，请立即停止并联系好友进行\"音乐急救\"。"
+      },
+      "COPYRIGHT": {
+        "code": "COPYRIGHT",
+        "cn": "因版权下架导致的心律不齐",
+        "intro": "看着列表里灰色的歌名，感觉就像失去了亲人。",
+        "desc": "您已被确诊为\"因版权下架导致的心律不齐\"。每次打开歌单，看到那些灰色的歌名，您的心都会揪一下。那不是灰色的字体，那是墓碑。每一首灰色的歌，都是一位逝去的老朋友。\n\n您还记得第一次发现歌被下架时的感觉——打开歌单，想听那首最爱的歌，结果弹出\"因版权原因暂不可用\"。您的世界在那一刻静止了。您疯狂地搜索\"XX歌为什么下架了\"\"XX歌哪个平台还能听\"，像一个在寻找失踪亲人的侦探。\n\n您甚至开始囤积音乐——把所有能下载的歌都下载下来，把能缓存的歌都缓存好，生怕哪天醒来又有一批歌变成灰色。您的手机存储空间已经告急，但您不敢删任何一首歌，因为\"万一哪天它就下架了呢\"。\n\n医嘱：接受音乐版权流动的现实。建议定期导出歌单备份。如果灰色歌名数量超过100首，请考虑寻求专业心理援助。"
+      },
+      "THRESHOLD": {
+        "code": "THRESHOLD",
+        "cn": "快乐阈值升高综合征",
+        "intro": "只有后摇、核嗓、黑金属才能安慰我，听《好运来》面不改色。",
+        "desc": "您已被确诊为\"快乐阈值升高综合征\"。您的音乐审美已经进化到了一个常人难以企及的高度——普通流行歌？太浅。民谣？太矫情。说唱？太吵。只有后摇那15分钟的层层推进、核嗓那撕裂灵魂的嘶吼、黑金属那混沌原始的暴烈，才能在您已经千疮百孔的心上留下一点痕迹。\n\n您的歌单对普通人来说就像一份\"精神酷刑清单\"。朋友借您的耳机听了30秒，表情从好奇变成了惊恐，最后小心翼翼地问：\"你……还好吗？\"\n\n最可怕的是，您听《好运来》面不改色，听《小星星》内心毫无波澜，但听到Sigur Rós的某个音符会突然泪流满面。您的快乐阈值已经被训练得如此之高，以至于只有最极端的音乐才能触达您的情感核心。\n\n医嘱：偶尔尝试回归\"简单快乐\"的音乐。如果《好运来》依然无法让您嘴角上扬，建议增加音乐类型的多样性，避免审美通道进一步收窄。"
+      },
+      "VIRGIN": {
+        "code": "VIRGIN",
+        "cn": "伤感情歌情感代偿障碍",
+        "intro": "明明没谈过恋爱，听歌却觉得已经离了八次婚。",
+        "desc": "您已被确诊为\"伤感情歌情感代偿障碍\"。这是本次鉴定中最具戏剧性的工伤——您的恋爱经验可能为零，但您的情感阅历已经通过音乐\"代偿\"到了一个离异八次的中年人都自叹不如的水平。\n\n您没有失恋过，但您听陈奕迅的《十年》时哭得比任何失恋的人都惨。您没有被人抛弃过，但您听林宥嘉的《浪费》时觉得这首歌就是在唱您。您没有结过婚更没有离过婚，但您听薛之谦时觉得自己已经经历了完整的婚姻周期。\n\n您的情感世界不是通过真实经历构建的，而是通过几千首伤感情歌\"虚拟构建\"的。您的眼泪不是为某个人流的，是为几百个作词人的集体创作流的。您不是在听歌，您是在通过音乐进行一场又一场的\"虚拟恋爱\"。\n\n医嘱：建议适度接触现实社交。如果条件允许，尝试真正的恋爱体验。请注意：现实中的感情没有BGM，也没有歌词字幕，可能需要一定适应期。"
+      },
+      "EMO23": {
+        "code": "EMO23",
+        "cn": "深夜emo准点报时体质",
+        "intro": "每晚23:00自动切换歌单，人间清醒与半夜发疯无缝衔接。",
+        "desc": "您已被确诊为\"深夜emo准点报时体质\"。您的身体里装了一个精准到秒的生物钟——每天晚上23:00，不需要闹钟，不需要提醒，您的歌单会自动从\"白天的快乐打工人BGM\"切换到\"深夜emo专属歌单\"。\n\n22:59，您还在和朋友聊天、刷短视频、笑得像个正常人。23:00，您的表情突然凝固，眼神变得深邃而忧伤，手指不自觉地打开网易云，搜索\"深夜一个人听的歌\"。23:01，第一首歌响起，您的眼泪已经在眼眶里打转了。\n\n您的深夜状态切换速度之快，堪比川剧变脸。白天那个阳光开朗的人仿佛从未存在过，取而代之的是一个被伤感情歌和人生哲学包围的深夜哲学家。凌晨2点，您在评论区写下了一段足以载入史册的情感独白。第二天早上醒来，您看着自己昨晚的评论，尴尬到想注销账号。\n\n医嘱：23:00前强制放下手机。如果无法避免深夜emo，请将emo时间控制在1小时内。凌晨发的朋友圈请在第二天早上删除，以减少社会性死亡的风险。"
+      },
+      "HEART": {
+        "code": "HEART",
+        "cn": "红心外科手术式精准收纳癖",
+        "intro": "每点一次红心都要确认这首歌配不配进我的\"灵魂歌单\"。",
+        "desc": "您已被确诊为\"红心外科手术式精准收纳癖\"。在您的音乐世界里，点红心不是一件随手的事，而是一场庄严的仪式。每一颗红心，都代表着您对这首歌的最高认可——它必须通过旋律、歌词、编曲、情感共鸣的四重审核，才有资格进入您的\"灵魂歌单\"。\n\n您的红心列表就是您的音乐品味名片。您不允许任何\"不够格\"的歌混入其中。如果某天您发现一首歌\"配不上\"那颗红心，您会毫不犹豫地取消——就像一位外科医生，精准地切除不合格的组织。\n\n您的朋友可能会觉得您\"太较真了\"，但您知道，这不是较真，这是对音乐的尊重。每一颗红心都是一份承诺，每一个歌单都是一座精心策划的展览馆。您不是在收藏歌，您是在策展。\n\n医嘱：红心是自由的，不是每首歌都需要配得上格莱美。建议尝试\"冲动红心法\"——觉得好听就点，不要思考。如果事后后悔，取消就好，人生没有什么是不能反悔的。"
+      },
+      "SKIP": {
+        "code": "SKIP",
+        "cn": "切歌腱鞘炎高危人群",
+        "intro": "一首歌的高潮刚结束0.1秒，大拇指已经完成了切歌动作。",
+        "desc": "您已被确诊为\"切歌腱鞘炎高危人群\"。您的大拇指已经形成了一种近乎本能的切歌反射弧——一首歌的高潮结束、尾奏开始的那一瞬间，您的拇指会在0.1秒内完成\"识别高潮结束→判断尾奏无价值→滑动切歌\"的全套流程。\n\n您的切歌频率高到令人咋舌。别人一首歌听3分钟，您一首歌听90秒（只听副歌）。您的\"最近播放\"列表看起来像一份\"被嫌弃歌曲名录\"——几乎每首歌都只播放了不到一半。\n\n您的拇指已经开始出现腱鞘炎的早期症状：酸痛、僵硬、偶尔弹响。医生问您是不是手机用太多，您沉默了——不是手机用太多，是切歌切太多。\n\n医嘱：强制设置\"切歌冷却时间\"为30秒。如果实在忍不住，建议使用\"听完一首完整歌\"挑战——从第一秒听到最后一秒，包括前奏和尾奏。坚持一周，腱鞘炎症状有望缓解。"
+      },
+      "NICHE": {
+        "code": "NICHE",
+        "cn": "小众优越感维持困难症",
+        "intro": "发现私藏的宝藏歌曲评论破了999+，会有强烈的\"被绿\"感。",
+        "desc": "您已被确诊为\"小众优越感维持困难症\"。您是那种在音乐世界里扮演\"探险家\"的人——您不屑于听排行榜上的热门歌曲，您热衷于挖掘那些藏在角落里的宝藏音乐。当您发现一首只有37条评论的冷门好歌时，您的内心会涌起一种\"发现新大陆\"般的狂喜。\n\n但这份喜悦是脆弱的。因为您知道，总有一天，这首歌会被某个短视频博主翻唱，然后一夜之间评论破万，从\"只有我知道的秘密\"变成\"全网都在听的爆款\"。那一天到来时，您会经历一种类似于\"被绿\"的心理创伤——\"我的歌，被别人抢走了\"。\n\n您开始在评论区写\"我比999+更早喜欢这首歌\"，试图证明自己的\"先占权\"。但没有人会在意。您的小众优越感，正在被算法和流量一点一点蚕食。\n\n医嘱：接受\"好音乐不应该被藏起来\"这个事实。您的发现确实很有品味，但分享并不会减损它的价值。如果实在难以接受，建议转向更加冷门的音乐领域——比如实验噪音或田野录音。"
+      },
+      "COVER": {
+        "code": "COVER",
+        "cn": "专辑封面审美偏执狂",
+        "intro": "会因为封面太丑而拒绝听一首据说很好听的歌。",
+        "desc": "您已被确诊为\"专辑封面审美偏执狂\"。在您的音乐审美体系中，视觉和听觉是深度绑定的——一首歌好不好听，首先要看封面好不好看。如果封面丑了，这首歌在您心里已经\"输在了起跑线上\"。\n\n您有过无数次这样的经历：朋友极力推荐一首歌，您打开一看封面——\"这什么审美？算了不听。\"然后错过了一首可能改变您人生的好歌。反过来，您也有过因为封面太好看而点开一首歌，结果发现歌很难听，但封面已经被您截图保存了。\n\n您的歌单在别人看来就像一个\"封面设计展\"——每首歌的封面都精心挑选过，整体色调和谐统一，排列起来就像一本设计杂志。您甚至会给封面不好看但歌好听的歌手动换一张自定义封面。\n\n医嘱：尝试\"闭眼听歌法\"——不看封面，只听音乐。如果发现一首封面丑但歌好听的宝藏，请给它一个机会。毕竟，人不可貌相，歌也不可\"封\"相。"
+      },
+      "SLEEP": {
+        "code": "SLEEP",
+        "cn": "睡眠障碍性听歌列表依赖",
+        "intro": "没有那个特定的雨声/海浪/ASMR歌单，睁眼到天亮。",
+        "desc": "您已被确诊为\"睡眠障碍性听歌列表依赖\"。您的睡眠已经与一个特定的歌单形成了深度绑定——没有它，您的身体会拒绝进入睡眠模式。这个歌单可能是雨声、海浪、钢琴曲、ASMR，或者是某个特定歌手的低语。\n\n您的入睡流程是这样的：打开网易云→找到那个歌单→按下播放→调整音量到刚好能听到的程度→闭上眼睛→等待睡眠降临。这个流程已经执行了上千次，您的身体已经把它当成了\"入睡信号\"。\n\n但如果有一天，这个歌单因为版权问题无法播放了呢？那将是一个不眠之夜。您会翻遍整个APP寻找替代品，但没有任何雨声能替代那个\"对的雨声\"，没有任何海浪能替代那个\"对的海浪\"。您的失眠不是因为焦虑，而是因为\"入睡仪式被破坏了\"。\n\n医嘱：建议提前下载离线缓存，防止版权变动导致的失眠危机。同时建议培养2-3个备用入睡歌单，分散依赖风险。"
+      },
+      "DAILY": {
+        "code": "DAILY",
+        "cn": "日推冷漠厌倦型人格",
+        "intro": "点了七遍\"不感兴趣\"，日推依然顽强地推荐同一首抖音神曲。",
+        "desc": "您已被确诊为\"日推冷漠厌倦型人格\"。您和网易云日推之间的关系已经从\"期待每天的新发现\"恶化成了\"每天一次的互相伤害\"。您的日推页面就像一个固执的推销员——不管您点了多少次\"不感兴趣\"，它依然顽强地给您推荐那些您永远不会听的歌。\n\n您已经点了七遍\"不感兴趣\"，但那首抖音神曲明天还会出现在您的日推里。您已经把某位歌手拉黑了三次，但日推依然觉得\"您可能喜欢\"。您开始怀疑日推算法是不是在故意气您。\n\n最让您崩溃的是，您偶尔会看到别人的日推推荐——\"天哪，这也太准了吧！\"\"日推今天给我推了一首宝藏！\"——而您的日推永远在推那些您最不想听的歌。您开始怀疑自己是不是被算法\"针对\"了。\n\n医嘱：日推算法需要时间学习。建议坚持使用\"不感兴趣\"和\"垃圾桶\"功能，同时多听不同类型的音乐以丰富算法数据。如果日推依然顽固，建议放弃日推，回归手动选歌的原始方式。"
+      },
+      "SHAZAM": {
+        "code": "SHAZAM",
+        "cn": "听歌识曲应激反应",
+        "intro": "听到商场广播里的BGM，0.5秒之内必须掏出手机打开识别功能。",
+        "desc": "您已被确诊为\"听歌识曲应激反应\"。您的耳朵已经进化成了一种\"全天候音乐扫描仪\"——无论您在哪里，无论在做什么，只要听到一段陌生的旋律，您的身体就会自动启动\"识别程序\"。\n\n商场、咖啡厅、电梯、出租车、甚至路边摊的喇叭——任何BGM都逃不过您的耳朵。0.5秒内掏出手机，打开听歌识曲，等待识别结果。识别成功：满足感+1。识别失败：焦虑感+100，开始疯狂搜索歌词片段。\n\n您的手机里至少装了3个听歌识曲APP，因为\"万一一个识别不出来，还有备用的\"。您的朋友已经习惯了和您走在路上突然停下来掏手机的动作——\"又听到好听的BGM了？\"他们问。您点头，手指已经在飞速操作了。\n\n医嘱：不是所有的BGM都需要被识别。有些旋律注定是\"背景中的背景\"，让它们保持神秘也是一种美。如果识别强迫症严重影响社交，建议出门时关闭听歌识曲APP的通知权限。"
+      },
+      "MV": {
+        "code": "MV",
+        "cn": "颅内MV导演妄想症",
+        "intro": "戴上耳机，楼道就是T台，地铁就是末日战场片场。",
+        "desc": "您已被确诊为\"颅内MV导演妄想症\"。当您戴上耳机的那一刻，现实世界就不再是现实世界了——它变成了您私人MV的拍摄现场。楼道是T台，您是超模，每一步都踩在节拍上；地铁是末日战场，您是最后的幸存者，眼神坚毅地望向远方；便利店是日剧片场，您是主角，拿起便当的那一刻镜头缓缓推进。\n\n您的颅内MV制作水准极高——运镜、剪辑、调色、特效一应俱全。虽然这一切只存在于您的想象中，但对您来说，这些画面的真实程度不亚于任何一部院线大片。\n\n最尴尬的时刻发生在您忘记自己正在\"拍MV\"的时候——比如在地铁里不自觉地跟着音乐摆出了一个\"帅气pose\"，然后发现对面的人正在用一种\"这人是不是有什么问题\"的眼神看着您。\n\n医嘱：颅内MV是正常现象，但请注意控制外在表现。建议在公共场合降低\"表演幅度\"，将MV拍摄限制在颅内进行。"
+      },
+      "TIMEWARP": {
+        "code": "TIMEWARP",
+        "cn": "时间感知障碍（因听歌导致）",
+        "intro": "本来只想睡前听两首，回过神来天亮了，该起床上班了。",
+        "desc": "您已被确诊为\"时间感知障碍（因听歌导致）\"。在您的世界里，时间的流速和音乐是深度绑定的——戴上耳机的那一刻，时间就开始加速。您以为只过了5分钟，实际上已经过了2小时。您以为只听了3首歌，实际上歌单已经循环了4遍。\n\n最经典的场景发生在睡前：23:00，您打开网易云，心想\"听两首就睡\"。第一首结束，23:04。\"再听一首。\"第二首结束，23:09。\"最后一首。\"第三首结束，23:15。\"这首歌的评论区应该看看。\"01:30，您从评论区抬起头，发现窗外天已经微微亮了。\n\n您的时间感知系统已经被音乐彻底劫持。在音乐的世界里，时间不是线性的，而是循环的——就像单曲循环一样，您的生活也在不知不觉中循环着\"再听最后一首\"的魔咒。\n\n医嘱：设置\"睡前听歌定时关闭\"功能，建议设定为30分钟。如果30分钟后您依然醒着，请关闭手机并尝试数羊。如果羊也开始唱您歌单里的歌，请立即就医。"
+      },
+      "AIRBAND": {
+        "code": "AIRBAND",
+        "cn": "空气乐器无实物表演艺术家",
+        "intro": "鼓点响起，手里没有吉他/鼓槌，只有空气和尴尬的气氛。",
+        "desc": "您已被确诊为\"空气乐器无实物表演艺术家\"。当音乐响起的那一刻，您的双手就会自动变成空气吉他、空气鼓槌、空气麦克风——虽然手里什么都没有，但您的表演是认真的。\n\n您的空气吉他技术堪称专业：扫弦、推弦、点弦、摇把，一个不落。您的空气鼓技术更是出神入化：底鼓、军鼓、镲片、滚奏，节奏精准到可以和原曲完美同步。如果空气乐器有奥运会，您至少能拿三枚金牌。\n\n最尴尬的时刻发生在公共场合——比如地铁里、电梯里、排队时，一首节奏感强的歌突然响起，您的手指开始不受控制地\"弹奏\"，然后发现周围的人都在看您。但您不在乎，因为真正的艺术家，从来不会在意观众的目光。\n\n医嘱：空气乐器表演是一种健康的音乐表达方式，但请注意场合。建议在私密空间（如卧室、浴室）尽情表演，在公共场合适当克制。如果实在忍不住，可以考虑购买一把真正的乐器。"
+      },
+      "OVERREAD": {
+        "code": "OVERREAD",
+        "cn": "歌词文本过度解读综合征",
+        "intro": "觉得作词人写的每一句话，都是在偷窥我的生活。",
+        "desc": "您已被确诊为\"歌词文本过度解读综合征\"。在您的认知体系中，歌词不是\"写出来的\"，而是\"偷窥您的生活后记录下来的\"。每一句歌词都精准地描述了您的人生经历，每一个字都像是在您的心上刻出来的。\n\n您听歌时会在脑海里自动生成一份\"歌词分析报告\"：这句写的是我的初恋，那句写的是我的高考，这段写的是我在出租屋里哭的那个晚上，那段写的是我对未来的迷茫……您确信作词人一定在您的房间里装了监控，否则不可能写得这么准。\n\n最可怕的是，您会把不同歌的歌词\"拼贴\"成一篇完整的人生自传。您的网易云年度听歌报告不是一份音乐消费记录，而是一部\"歌词体回忆录\"。\n\n医嘱：歌词的共鸣是美好的，但请记住：好的歌词之所以打动人，是因为它写的是人类共通的情感，而不是某一个人的故事。您不是被偷窥了，您只是被理解了。"
+      },
+      "SPEAKER": {
+        "code": "SPEAKER",
+        "cn": "外放开会恐惧症",
+        "intro": "手机突然断开蓝牙/耳机没插严，会在公共场合引发猝死性尴尬。",
+        "desc": "您已被确诊为\"外放开会恐惧症\"。这是当代音乐爱好者最常见的创伤性应激障碍之一。当您的手机突然断开蓝牙连接，或者耳机没有插严导致音乐从外放喇叭中传出时，您会经历一种\"社会性死亡\"——全身僵硬、面如死灰、手忙脚乱地找手机关音量，而周围所有人的目光都聚焦在您身上。\n\n最可怕的场景发生在安静的环境中——图书馆、会议室、电梯、考场——当您的emo歌单突然从手机外放中传出\"我说算了啊～我不难过啊～\"时，那种尴尬足以让您原地消失。\n\n您已经患上了\"蓝牙焦虑症\"——每隔30秒就要看一眼手机确认蓝牙连接正常。您在公共场合永远不会把音量调到最大，因为\"万一耳机掉了呢\"。您的手机设置里，蓝牙开关永远处于\"开启\"状态。\n\n医嘱：建议购买降噪耳机并启用\"有线+蓝牙\"双保险模式。在安静场所将音量控制在60%以下。如果已经发生过外放事故，请深呼吸并默念\"没有人会记住这件事\"（虽然您自己会记一辈子）。"
+      },
+      "RESIDENT": {
+        "code": "RESIDENT",
+        "cn": "网易云村民户口迁出困难症",
+        "intro": "手机里装了其他APP，但每晚打开的还是那个红色图标。",
+        "desc": "您已被确诊为\"网易云村民户口迁出困难症\"。您的手机里装满了各种音乐APP——QQ音乐、Spotify、Apple Music、汽水音乐——但每晚打开的，永远是那个红色图标。\n\n您不是没尝试过迁移。您甚至认真对比过各个平台的音质、曲库、UI设计。但每次打开其他APP，您都会感到一种莫名的空虚——\"我的红心不在这里，我的歌单不在这里，我的评论不在这里，我的回忆不在这里\"。\n\n您已经在这个红色APP里生活了太多年，积累了太多的精神资产：3000颗红心、50个歌单、200条走心评论、1000+收藏歌单、无数个深夜的emo记录……这些东西，是其他任何APP都无法替代的。您不是在用一个音乐APP，您是在守护一座精神家园。\n\n医嘱：户口迁出不是必须的。如果网易云能满足您的需求，继续使用它就好。但如果版权问题严重影响听歌体验，建议使用\"双栖模式\"——网易云负责社区和歌单管理，其他APP负责补齐版权缺口。"
+      },
+      "BATTERY": {
+        "code": "BATTERY",
+        "cn": "电量恐慌型听歌依赖",
+        "intro": "手机电量低于20%时，第一反应是还能听几遍《七里香》。",
+        "desc": "您已被确诊为\"电量恐慌型听歌依赖\"。当您的手机电量低于20%时，普通人的第一反应是\"找充电器\"，而您的第一反应是\"还能听几首歌\"。\n\n您的大脑里有一个内置的\"电量-歌曲换算器\"：20%电量≈听8首歌≈24分钟；10%电量≈听4首歌≈12分钟；5%电量≈听2首歌≈6分钟。您会根据剩余电量精准计算还能听多少首歌，然后开始进行\"最后的音乐抉择\"——如果只能听最后一首歌，您会选哪首？\n\n最极端的情况下，您会在手机1%电量时做出一个壮烈的决定：关闭所有APP、调低屏幕亮度、开启省电模式，只保留网易云，然后播放那首\"此生必听的最后一首歌\"。当手机在歌曲的高潮部分黑屏时，您会感到一种奇异的浪漫——\"这首歌，值得我用最后的1%来演奏\"。\n\n医嘱：建议随身携带充电宝。如果条件不允许，请提前下载离线歌曲以备不时之需。请记住：手机没电了可以充电，但如果因为听歌导致手机关机而错过了重要消息，那才是真正的\"工伤\"。"
+      },
+      "LIFETIME": {
+        "code": "LIFETIME",
+        "cn": "网抑云终身荣誉工伤",
+        "intro": "使用网易云8年以上，每晚23:00准时emo，评论区累计留言一万字。",
+        "desc": "恭喜您（或者说不幸的是），您已被授予\"网抑云终身荣誉工伤\"称号。这不是一种普通的工伤诊断，而是一种至高无上的\"荣誉\"——它意味着您已经在这个红色APP里浸泡了超过8年，经历了从\"音乐爱好者\"到\"深夜哲学家\"的完整进化。\n\n8年。2900多个夜晚。无数个23:00准时开启的emo时刻。您见证了网易云从\"音乐社区\"到\"网抑云\"的完整变迁。您的评论区总字数已经超过了一本小说。您的歌单分类精细程度堪比图书馆索引系统。您的年度听歌报告，每一份都是一部个人编年史。\n\n您不是在用网易云听歌，您是在用网易云活着。这个APP记录了您的每一次心碎、每一次深夜崩溃、每一次\"我没事\"的谎言。它是您的日记本、您的心理咨询室、您的深夜食堂、您的精神避难所。\n\n医嘱：无。终身荣誉工伤不可治愈，也不需要治愈。这是您与音乐之间最深沉的羁绊。请继续在评论区写下您的故事，因为总有一个深夜的灵魂，需要看到您的文字才能入睡。"
+      },
+      "ALLERGY": {
+        "code": "ALLERGY",
+        "cn": "音乐过敏体质",
+        "intro": "标准工伤库对您的听歌习惯集体罢工，您可能是这个世界上唯一一个对\"音乐工伤免疫\"的人。",
+        "desc": "恭喜您，您测出了一个极其罕见的诊断结果——\"音乐过敏体质\"。这意味着您的听歌习惯过于\"正常\"或过于\"矛盾\"，以至于28种标准工伤诊断都无法准确匹配您的画像。\n\n可能的情况包括但不限于：\n• 您听歌完全随缘，没有任何固定的习惯和偏好\n• 您的音乐品味横跨古典、流行、摇滚、电子、民谣、说唱等所有流派，导致维度分数过于平均\n• 您是一个\"佛系听众\"，对音乐没有强烈的情感依赖，也没有任何强迫行为\n• 您的听歌习惯自相矛盾，算法无法理解您\n\n简而言之，您可能是这个世界上唯一一个\"对音乐工伤免疫\"的人。别人听歌听出了工伤，您听歌听出了\"养生\"。\n\n医嘱：请继续保持您的\"音乐免疫体质\"，这可能是最健康的听歌方式。如果您觉得这个结果太无聊，建议尝试在深夜打开网易云评论区，您的人生可能会因此发生翻天覆地的变化。"
+      }
+    };
+
+    const TYPE_IMAGES = {
+      "CHORUS": "./image/CHORUS.png",
+      "LIVE": "./image/LIVE.png",
+      "UMBILICAL": "./image/UMBILICAL.png",
+      "LOOP": "./image/LOOP.png",
+      "SHOWER": "./image/SHOWER.png",
+      "INTRO": "./image/INTRO.png",
+      "SHUFFLE": "./image/SHUFFLE.png",
+      "COMMENT": "./image/COMMENT.png",
+      "COPYPASTE": "./image/COPYPASTE.png",
+      "EXRADAR": "./image/EXRADAR.png",
+      "COPYRIGHT": "./image/COPYRIGHT.png",
+      "THRESHOLD": "./image/THRESHOLD.png",
+      "VIRGIN": "./image/VIRGIN.png",
+      "EMO23": "./image/EMO23.png",
+      "HEART": "./image/HEART.png",
+      "SKIP": "./image/SKIP.png",
+      "NICHE": "./image/NICHE.png",
+      "COVER": "./image/COVER.png",
+      "SLEEP": "./image/SLEEP.png",
+      "DAILY": "./image/DAILY.png",
+      "SHAZAM": "./image/SHAZAM.png",
+      "MV": "./image/MV.png",
+      "TIMEWARP": "./image/TIMEWARP.png",
+      "AIRBAND": "./image/AIRBAND.png",
+      "OVERREAD": "./image/OVERREAD.png",
+      "SPEAKER": "./image/SPEAKER.png",
+      "RESIDENT": "./image/RESIDENT.png",
+      "BATTERY": "./image/BATTERY.png",
+      "LIFETIME": "./image/LIFETIME.png",
+      "ALLERGY": "./image/ALLERGY.png"
+    };
+
+    const NORMAL_TYPES = [
+      { "code": "CHORUS", "pattern": "HHMMMMMMMMML" },
+      { "code": "LIVE", "pattern": "HHMMMMMMHMMH" },
+      { "code": "UMBILICAL", "pattern": "HHHHMMMMMMML" },
+      { "code": "LOOP", "pattern": "HMHHMMMMMMML" },
+      { "code": "SHOWER", "pattern": "HMHHMMMMMLHHH" },
+      { "code": "INTRO", "pattern": "HMHHMMMMHMMML" },
+      { "code": "SHUFFLE", "pattern": "HMHHMMMMHMMML" },
+      { "code": "COMMENT", "pattern": "MMHHHHMMMMML" },
+      { "code": "COPYPASTE", "pattern": "MMHHHHMMMMMLH" },
+      { "code": "EXRADAR", "pattern": "MMHHHHMMMMML" },
+      { "code": "COPYRIGHT", "pattern": "HMHHHHMMMMML" },
+      { "code": "THRESHOLD", "pattern": "MMHHHHMMMMHHH" },
+      { "code": "VIRGIN", "pattern": "MMHHHHMMMMHHH" },
+      { "code": "EMO23", "pattern": "MMHHHHMMMMML" },
+      { "code": "HEART", "pattern": "MMMMHHHMMMMML" },
+      { "code": "SKIP", "pattern": "MMMMHHMMMMML" },
+      { "code": "NICHE", "pattern": "MMMMHHMMHMMM" },
+      { "code": "COVER", "pattern": "MMMMHHHHMMML" },
+      { "code": "SLEEP", "pattern": "HMHHMMMMMMML" },
+      { "code": "DAILY", "pattern": "MMMMHHMMMMML" },
+      { "code": "SHAZAM", "pattern": "MMMMHHMMHHHM" },
+      { "code": "MV", "pattern": "MMMMMMMLHHH" },
+      { "code": "TIMEWARP", "pattern": "HMHHMMMMMLHHH" },
+      { "code": "AIRBAND", "pattern": "MMMMMMMLHHHH" },
+      { "code": "OVERREAD", "pattern": "MMMMMMMLHHH" },
+      { "code": "SPEAKER", "pattern": "HMHHMMMMMLHHM" },
+      { "code": "RESIDENT", "pattern": "HHHHMMMMMMML" },
+      { "code": "BATTERY", "pattern": "HHHHMMMMMMML" }
+    ];
+
+    const DIM_EXPLANATIONS = {
+      "D1": {
+        "L": "耳机是配件，不是器官。没音乐也能活，甚至偶尔享受安静。",
+        "M": "习惯了有BGM的生活，但摘了耳机也不会世界末日。依赖度随心情波动。",
+        "H": "耳机焊在耳朵上，摘下来就像被拔了氧气管。没有音乐的世界不值得待。"
+      },
+      "D2": {
+        "L": "喜新厌旧型听众，一首歌听腻了就换，很少有\"循环到死\"的时候。",
+        "M": "会循环喜欢的歌，但有上限。腻了就自然切换，不会死磕一首。",
+        "H": "单曲循环是信仰。一首歌可以听100遍不腻，室友的投诉是勋章。"
+      },
+      "D3": {
+        "L": "哪个平台有版权用哪个，没有忠诚度可言。实用主义听众。",
+        "M": "有主力平台，但也会用其他APP补版权。属于\"骑墙派\"。",
+        "H": "网易云就是家，户口已经落了，搬家是不可能搬家的。"
+      },
+      "E1": {
+        "L": "听歌就是听歌，不会把歌词往自己身上套。理性型听众。",
+        "M": "偶尔会有共鸣，但不会每次都\"破防\"。情感开关看歌曲质量。",
+        "H": "每首歌都是写给自己的。歌词就是日记，旋律就是人生BGM。"
+      },
+      "E2": {
+        "L": "到点就睡，作息规律。深夜和白天没有区别，不会因为天黑就伤感。",
+        "M": "偶尔深夜会感性，但不会每次都emo。属于\"间歇性深夜哲学家\"。",
+        "H": "23:00准时emo，评论区是深夜食堂，枕头湿了也不关。专业级深夜伤患者。"
+      },
+      "E3": {
+        "L": "过去的就过去了，不会因为一首歌想起某个人。向前看型人格。",
+        "M": "偶尔会被触发，但能快速恢复。前任相关歌曲会跳过但不会崩溃。",
+        "H": "日推出现前任的歌就破防。歌单按\"前任编年史\"排列。情感阴影面积巨大。"
+      },
+      "O1": {
+        "L": "歌单够用就行，不纠结分类。红心随便点，不搞\"灵魂审核\"。",
+        "M": "有基本的分类习惯，但不会过于强迫。红心会犹豫一下但不会纠结太久。",
+        "H": "歌单是艺术，红心是仪式。每首歌都有严格的归位标准，错放一首都不行。"
+      },
+      "O2": {
+        "L": "能耐心听完一整首歌，包括前奏和尾奏。对\"不完美\"有较高容忍度。",
+        "M": "会在某些时刻切歌，但不是每首都切。容忍度看心情。",
+        "H": "3秒没hook就切，高潮结束0.1秒就切。拇指比大脑反应更快。"
+      },
+      "O3": {
+        "L": "不在意一首歌火不火，好听就行。大众小众一视同仁。",
+        "M": "有点小众偏好，但不会因为歌火了就讨厌它。属于\"温和型音乐探险家\"。",
+        "H": "宝藏歌被发现了就像被绿了。评论破999+要写悼文。小众优越感是精神支柱。"
+      },
+      "I1": {
+        "L": "戴上耳机就是加了BGM，世界还是那个世界。",
+        "M": "会有点沉浸感，走路带风，但不会完全脱离现实。",
+        "H": "现实世界已经不存在了。楼道是T台，地铁是战场，我是MV主角。"
+      },
+      "I2": {
+        "L": "听歌就是听歌，不会跟着唱跳。属于\"安静型听众\"。",
+        "M": "会跟着哼几句，偶尔点头打节拍。表演欲在可控范围内。",
+        "H": "空气吉他、空气鼓槌、空气麦克风全部就位。浴室就是我的演唱会。"
+      },
+      "I3": {
+        "L": "歌词就是歌词，不会过度联想。听完就过了。",
+        "M": "偶尔会觉得某句歌词\"写得真好\"，但不会觉得\"在写我\"。",
+        "H": "作词人一定在我房间装了监控。每句话都是我的人生写照。"
+      }
+    };
+
+    const dimensionOrder = ['D1','D2','D3','E1','E2','E3','O1','O2','O3','I1','I2','I3'];
+
+    const app = {
+      shuffledQuestions: [],
+      answers: {},
+      previewMode: false
+    };
+
+    const screens = {
+      intro: document.getElementById('intro'),
+      test: document.getElementById('test'),
+      result: document.getElementById('result')
+    };
+
+    const questionList = document.getElementById('questionList');
+    const progressBar = document.getElementById('progressBar');
+    const progressText = document.getElementById('progressText');
+    const submitBtn = document.getElementById('submitBtn');
+    const testHint = document.getElementById('testHint');
+
+    function showScreen(name) {
+      Object.entries(screens).forEach(([key, el]) => {
+        el.classList.toggle('active', key === name);
+      });
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function shuffle(array) {
+      const arr = [...array];
+      for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+      }
+      return arr;
+    }
+
+    function getVisibleQuestions() {
+      const visible = [...app.shuffledQuestions];
+      const gateIndex = visible.findIndex(q => q.id === 'wy_gate_q1');
+      if (gateIndex !== -1 && app.answers['wy_gate_q1'] === 3) {
+        visible.splice(gateIndex + 1, 0, specialQuestions[1]);
+      }
+      return visible;
+    }
+
+    function getQuestionMetaLabel(q) {
+      if (q.special) return '补充题';
+      return app.previewMode ? dimensionMeta[q.dim].name : '维度已隐藏';
+    }
+
+    function renderQuestions() {
+      const visibleQuestions = getVisibleQuestions();
+      questionList.innerHTML = '';
+      visibleQuestions.forEach((q, index) => {
+        const card = document.createElement('article');
+        card.className = 'question';
+        card.innerHTML = `
+          <div class="question-meta">
+            <div class="badge">第 ${index + 1} 题</div>
+            <div>${getQuestionMetaLabel(q)}</div>
+          </div>
+          <div class="question-title">${q.text}</div>
+          <div class="options">
+            ${q.options.map((opt, i) => {
+              const code = ['A', 'B', 'C', 'D'][i] || String(i + 1);
+              const checked = app.answers[q.id] === opt.value ? 'checked' : '';
+              return `
+                <label class="option">
+                  <input type="radio" name="${q.id}" value="${opt.value}" ${checked} />
+                  <div class="option-code">${code}</div>
+                  <div>${opt.label}</div>
+                </label>
+              `;
+            }).join('')}
+          </div>
+        `;
+        questionList.appendChild(card);
+      });
+
+      questionList.querySelectorAll('input[type="radio"]').forEach(input => {
+        input.addEventListener('change', (e) => {
+          const { name, value } = e.target;
+          app.answers[name] = Number(value);
+
+          if (name === 'wy_gate_q1') {
+            if (Number(value) !== 3) {
+              delete app.answers['wy_gate_q2'];
+            }
+            renderQuestions();
+            return;
+          }
+
+          updateProgress();
+        });
+      });
+
+      updateProgress();
+    }
+
+    function updateProgress() {
+      const visibleQuestions = getVisibleQuestions();
+      const total = visibleQuestions.length;
+      const done = visibleQuestions.filter(q => app.answers[q.id] !== undefined).length;
+      const percent = total ? (done / total) * 100 : 0;
+      progressBar.style.width = `${percent}%`;
+      progressText.textContent = `${done} / ${total}`;
+      const complete = done === total && total > 0;
+      submitBtn.disabled = !complete;
+      testHint.textContent = complete
+        ? '已完成！现在提交查看您的工伤诊断报告。'
+        : '请完成所有题目才能提交。工伤诊断需要全面评估。';
+    }
+
+    function sumToLevel(score) {
+      if (score <= 3) return 'L';
+      if (score === 4) return 'M';
+      return 'H';
+    }
+
+    function levelNum(level) {
+      return { L: 1, M: 2, H: 3 }[level];
+    }
+
+    function parsePattern(pattern) {
+      return pattern.replace(/-/g, '').split('');
+    }
+
+    function getLifetimeTriggered(levels) {
+      return app.answers['wy_gate_q1'] === 3
+        && app.answers['wy_gate_q2'] === 3
+        && levels['E2'] === 'H';
+    }
+
+    function computeResult() {
+      const rawScores = {};
+      const levels = {};
+      Object.keys(dimensionMeta).forEach(dim => { rawScores[dim] = 0; });
+
+      questions.forEach(q => {
+        rawScores[q.dim] += Number(app.answers[q.id] || 0);
+      });
+
+      Object.entries(rawScores).forEach(([dim, score]) => {
+        levels[dim] = sumToLevel(score);
+      });
+
+      const userVector = dimensionOrder.map(dim => levelNum(levels[dim]));
+      const ranked = NORMAL_TYPES.map(type => {
+        const vector = parsePattern(type.pattern).map(levelNum);
+        let distance = 0;
+        let exact = 0;
+        for (let i = 0; i < vector.length; i++) {
+          const diff = Math.abs(userVector[i] - vector[i]);
+          distance += diff;
+          if (diff === 0) exact += 1;
+        }
+        const similarity = Math.max(0, Math.round((1 - distance / 24) * 100));
+        return { ...type, ...TYPE_LIBRARY[type.code], distance, exact, similarity };
+      }).sort((a, b) => {
+        if (a.distance !== b.distance) return a.distance - b.distance;
+        if (b.exact !== a.exact) return b.exact - a.exact;
+        return b.similarity - a.similarity;
+      });
+
+      const bestNormal = ranked[0];
+      const lifetimeTriggered = getLifetimeTriggered(levels);
+
+      let finalDiagnosis;
+      let modeKicker = '您的工伤诊断';
+      let badge = `匹配度 ${bestNormal.similarity}% · 精准命中 ${bestNormal.exact}/12 维`;
+      let sub = '维度命中度较高，当前诊断结果可视为您的主要工伤类型。';
+      let special = false;
+
+      if (lifetimeTriggered) {
+        finalDiagnosis = TYPE_LIBRARY.LIFETIME;
+        modeKicker = '终身荣誉工伤已触发';
+        badge = '匹配度 100% · 8年网易云老村民认证';
+        sub = '您已在网抑云村生活太久，系统直接授予您终身荣誉工伤称号。';
+        special = true;
+      } else if (bestNormal.similarity < 60) {
+        finalDiagnosis = TYPE_LIBRARY.ALLERGY;
+        modeKicker = '系统强制兜底';
+        badge = `标准工伤库最高匹配仅 ${bestNormal.similarity}%`;
+        sub = '28种标准工伤都无法准确描述您的听歌习惯，系统判定您为\"音乐过敏体质\"。';
+        special = true;
+      } else {
+        finalDiagnosis = bestNormal;
+      }
+
+      return {
+        rawScores,
+        levels,
+        ranked,
+        bestNormal,
+        finalDiagnosis,
+        modeKicker,
+        badge,
+        sub,
+        special
+      };
+    }
+
+    function renderDimList(result) {
+      const dimList = document.getElementById('dimList');
+      dimList.innerHTML = dimensionOrder.map(dim => {
+        const level = result.levels[dim];
+        const explanation = DIM_EXPLANATIONS[dim][level];
+        return `
+          <div class="dim-item">
+            <div class="dim-item-top">
+              <div class="dim-item-name">${dimensionMeta[dim].name}</div>
+              <div class="dim-item-score">${level} / ${result.rawScores[dim]}分</div>
+            </div>
+            <p>${explanation}</p>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function renderResult() {
+      const result = computeResult();
+      const diagnosis = result.finalDiagnosis;
+
+      document.getElementById('resultModeKicker').textContent = result.modeKicker;
+      document.getElementById('resultTypeName').textContent = `${diagnosis.code}（${diagnosis.cn}）`;
+      document.getElementById('matchBadge').textContent = result.badge;
+      document.getElementById('resultTypeSub').textContent = result.sub;
+      document.getElementById('resultDesc').textContent = diagnosis.desc;
+      document.getElementById('posterCaption').textContent = diagnosis.intro;
+      document.getElementById('funNote').textContent = result.special
+        ? '本测试仅供娱乐。终身荣誉工伤和音乐过敏体质都是作者故意埋的彩蛋，请不要当真。'
+        : '本测试仅供娱乐。工伤诊断只是玩笑，请不要当真。祝大家听歌愉快！';
+
+      const posterBox = document.getElementById('posterBox');
+      const posterImage = document.getElementById('posterImage');
+      const imageSrc = TYPE_IMAGES[diagnosis.code];
+      if (imageSrc) {
+        posterImage.src = imageSrc;
+        posterImage.alt = `${diagnosis.code}（${diagnosis.cn}）`;
+        posterBox.classList.remove('no-image');
+      } else {
+        posterImage.removeAttribute('src');
+        posterImage.alt = '';
+        posterBox.classList.add('no-image');
+      }
+
+      renderDimList(result);
+      showScreen('result');
+    }
+
+    function startTest(preview = false) {
+      app.previewMode = previewMode;
+      app.answers = {};
+      const shuffledRegular = shuffle(questions);
+      const insertIndex = Math.floor(Math.random() * shuffledRegular.length) + 1;
+      app.shuffledQuestions = [
+        ...shuffledRegular.slice(0, insertIndex),
+        specialQuestions[0],
+        ...shuffledRegular.slice(insertIndex)
+      ];
+      renderQuestions();
+      showScreen('test');
+    }
+
+    document.getElementById('startBtn').addEventListener('click', () => startTest(false));
+    document.getElementById('backIntroBtn').addEventListener('click', () => showScreen('intro'));
+    document.getElementById('submitBtn').addEventListener('click', renderResult);
+    document.getElementById('restartBtn').addEventListener('click', () => startTest(false));
+    document.getElementById('toTopBtn').addEventListener('click', () => showScreen('intro'));
+  </script>
+</body>
+</html>
