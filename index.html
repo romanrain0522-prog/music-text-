@@ -1355,7 +1355,7 @@
     }
 
     function startTest(preview = false) {
-      app.previewMode = previewMode;
+      app.previewMode = preview;
       app.answers = {};
       const shuffledRegular = shuffle(questions);
       const insertIndex = Math.floor(Math.random() * shuffledRegular.length) + 1;
