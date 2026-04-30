@@ -1,0 +1,111 @@
+<view class="container">
+  <!-- 介绍/首页 -->
+  <view wx:if="{{currentScreen === 'intro'}}" class="screen active">
+    <view class="hero card hero-minimal">
+      <text class="hero-title">网抑云人格工伤鉴定报告</text>
+      <text class="sub">戴上耳机的那一刻，你的工伤就开始了。</text>
+      <view class="hero-actions">
+        <button class="btn-primary" bindtap="startTest">开始鉴定</button>
+      </view>
+      <view class="footer-text">
+        <text>基于SBTI算法架构改造</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 测试页面 -->
+  <view wx:if="{{currentScreen === 'test'}}" class="screen">
+    <view class="test-wrap card">
+      <view class="topbar">
+        <view class="progress">
+          <view class="progress-bar" style="width: {{progressPercent}}%"></view>
+        </view>
+        <text class="progress-text">{{doneCount}} / {{totalCount}}</text>
+      </view>
+
+      <view class="question-list">
+        <block wx:for="{{visibleQuestions}}" wx:key="id">
+          <view class="question">
+            <view class="question-meta">
+              <view class="badge">第 {{index + 1}} 题</view>
+              <text>{{item.special ? '补充题' : (previewMode ? dimensionMeta[item.dim].name : '维度已隐藏')}}</text>
+            </view>
+            <text class="question-title">{{item.text}}</text>
+            <view class="options">
+              <block wx:for="{{item.options}}" wx:for-item="opt" wx:key="value">
+                <view class="option" bindtap="selectOption" data-qid="{{item.id}}" data-value="{{opt.value}}">
+                  <view class="option-radio {{answers[item.id] === opt.value ? 'selected' : ''}}">
+                    <view wx:if="{{answers[item.id] === opt.value}}" class="radio-inner"></view>
+                  </view>
+                  <text class="option-code">{{['A', 'B', 'C', 'D'][index]}}</text>
+                  <text class="option-text">{{opt.label}}</text>
+                </view>
+              </block>
+            </view>
+          </view>
+        </block>
+      </view>
+
+      <view class="actions-bottom">
+        <text class="hint">{{submitBtnDisabled ? '请完成所有题目才能提交' : '已完成！现在提交查看您的工伤诊断报告。'}}</text>
+        <view class="btn-group">
+          <button class="btn-secondary" bindtap="backToIntro">返回首页</button>
+          <button class="btn-primary {{submitBtnDisabled ? 'disabled' : ''}}" bindtap="submitTest" disabled="{{submitBtnDisabled}}">提交并查看报告</button>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 结果页面 -->
+  <view wx:if="{{currentScreen === 'result'}}" class="screen">
+    <view class="result-wrap card">
+      <view class="result-layout">
+        <view class="result-top">
+          <view class="poster-box {{resultImage ? '' : 'no-image'}}">
+            <image wx:if="{{resultImage}}" class="poster-image" src="{{resultImage}}" mode="aspectFit" />
+            <text class="poster-caption">{{resultDiagnosis.intro}}</text>
+          </view>
+
+          <view class="type-box">
+            <text class="type-kicker">{{modeKicker}}</text>
+            <text class="type-name">{{resultDiagnosis.cn}}</text>
+            <view class="match">{{matchBadge}}</view>
+            <text class="type-subname">{{resultSub}}</text>
+          </view>
+        </view>
+
+        <view class="analysis-box">
+          <text class="section-title">详细诊断报告</text>
+          <text class="analysis-text">{{resultDiagnosis.desc}}</text>
+        </view>
+
+        <view class="dim-box">
+          <text class="section-title">十二维度评分</text>
+          <view class="dim-list">
+            <block wx:for="{{dimensionOrder}}" wx:key="*this">
+              <view class="dim-item">
+                <view class="dim-item-top">
+                  <text class="dim-item-name">{{dimensionMeta[item].name}}</text>
+                  <text class="dim-item-score">{{resultLevels[item]}} / {{resultRawScores[item]}}分</text>
+                </view>
+                <text class="dim-item-desc">{{dimExplanations[item][resultLevels[item]]}}</text>
+              </view>
+            </block>
+          </view>
+        </view>
+
+        <view class="note-box">
+          <text class="section-title">友情提示</text>
+          <text class="note-text">{{funNote}}</text>
+        </view>
+      </view>
+
+      <view class="result-actions">
+        <view class="btn-group">
+          <button class="btn-secondary" bindtap="restartTest">重新鉴定</button>
+          <button class="btn-primary" bindtap="backToIntro">回到首页</button>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>

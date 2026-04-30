@@ -1,0 +1,469 @@
+/* 页面样式 */
+page {
+  background: linear-gradient(180deg, #f8fff8 0%, #f6faf6 36%, #f2f7f3 100%);
+  min-height: 100vh;
+}
+
+.container {
+  max-width: 980rpx;
+  margin: 0 auto;
+  padding: 24rpx 32rpx 112rpx;
+}
+
+/* 卡片样式 */
+.card {
+  background: #ffffff;
+  border: 1rpx solid #dbe8dd;
+  border-radius: 44rpx;
+  box-shadow: 0 32rpx 80rpx rgba(47, 73, 55, 0.08);
+}
+
+/* 英雄区域 */
+.hero {
+  padding: 56rpx;
+  margin-top: 40rpx;
+  overflow: hidden;
+  position: relative;
+}
+
+.hero-minimal {
+  min-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 84rpx 40rpx;
+}
+
+.hero-title {
+  font-size: 56rpx;
+  line-height: 1.08;
+  letter-spacing: -0.03em;
+  max-width: 680rpx;
+  color: #1e2a22;
+  font-weight: bold;
+}
+
+.sub {
+  margin-top: 28rpx;
+  color: #6a786f;
+  font-size: 30rpx;
+  line-height: 1.75;
+  max-width: 720rpx;
+}
+
+.hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24rpx;
+  margin-top: 44rpx;
+}
+
+.footer-text {
+  padding-top: 80rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.footer-text text {
+  color: #6a786f;
+  font-size: 24rpx;
+}
+
+/* 按钮样式 */
+.btn-primary {
+  background: #4d6a53;
+  color: #ffffff;
+  padding: 28rpx 40rpx;
+  border-radius: 28rpx;
+  box-shadow: 0 24rpx 60rpx rgba(77, 106, 83, 0.18);
+  font-weight: bold;
+  font-size: 32rpx;
+  border: none;
+  line-height: 1;
+}
+
+.btn-primary.disabled {
+  opacity: 0.55;
+}
+
+.btn-secondary {
+  background: #ffffff;
+  color: #4d6a53;
+  padding: 28rpx 40rpx;
+  border-radius: 28rpx;
+  border: 1rpx solid #dbe8dd;
+  font-weight: bold;
+  font-size: 32rpx;
+  line-height: 1;
+}
+
+/* 屏幕切换 */
+.screen {
+  display: none;
+}
+
+.screen.active {
+  display: block;
+}
+
+/* 测试页面 */
+.test-wrap {
+  margin-top: 44rpx;
+  padding: 44rpx;
+}
+
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 32rpx;
+  margin-bottom: 36rpx;
+  flex-wrap: wrap;
+}
+
+.progress {
+  flex: 1;
+  min-width: 480rpx;
+  height: 20rpx;
+  background: #edf3ee;
+  border-radius: 999rpx;
+  overflow: hidden;
+  position: relative;
+}
+
+.progress-bar {
+  height: 100%;
+  background: linear-gradient(90deg, #97b59c, #5b7a62);
+  border-radius: inherit;
+  transition: width 0.22s ease;
+}
+
+.progress-text {
+  color: #6a786f;
+  font-size: 26rpx;
+  white-space: nowrap;
+}
+
+.question-list {
+  display: flex;
+  flex-direction: column;
+  gap: 32rpx;
+}
+
+.question {
+  border: 1rpx solid #dbe8dd;
+  border-radius: 36rpx;
+  padding: 36rpx;
+  background: linear-gradient(180deg, #ffffff, #fbfdfb);
+}
+
+.question-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 24rpx;
+  margin-bottom: 20rpx;
+  color: #6a786f;
+  font-size: 24rpx;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 12rpx;
+  border-radius: 999rpx;
+  padding: 12rpx 20rpx;
+  background: #edf6ef;
+  border: 1rpx solid #dbe8dd;
+  font-size: 24rpx;
+}
+
+.question-title {
+  font-size: 32rpx;
+  line-height: 1.7;
+  color: #1e2a22;
+}
+
+.options {
+  display: flex;
+  flex-direction: column;
+  gap: 20rpx;
+  margin-top: 28rpx;
+}
+
+.option {
+  display: flex;
+  align-items: flex-start;
+  gap: 24rpx;
+  padding: 28rpx;
+  border-radius: 28rpx;
+  border: 1rpx solid #dbe8dd;
+  background: #fff;
+}
+
+.option-radio {
+  width: 40rpx;
+  height: 40rpx;
+  border-radius: 50%;
+  border: 4rpx solid #4d6a53;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-top: 4rpx;
+}
+
+.option-radio.selected {
+  background: #4d6a53;
+}
+
+.radio-inner {
+  width: 20rpx;
+  height: 20rpx;
+  border-radius: 50%;
+  background: #fff;
+}
+
+.option-code {
+  font-weight: 800;
+  color: #4d6a53;
+  min-width: 44rpx;
+  font-size: 28rpx;
+}
+
+.option-text {
+  flex: 1;
+  font-size: 28rpx;
+  line-height: 1.6;
+  color: #1e2a22;
+}
+
+.actions-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 24rpx;
+  flex-wrap: wrap;
+  margin-top: 36rpx;
+  padding-top: 12rpx;
+}
+
+.hint {
+  color: #6a786f;
+  font-size: 26rpx;
+  line-height: 1.7;
+  max-width: 400rpx;
+}
+
+.btn-group {
+  display: flex;
+  gap: 24rpx;
+  flex-wrap: wrap;
+}
+
+/* 结果页面 */
+.result-wrap {
+  margin-top: 44rpx;
+  padding: 44rpx;
+}
+
+.result-layout {
+  display: flex;
+  flex-direction: column;
+  gap: 36rpx;
+}
+
+.result-top {
+  display: flex;
+  gap: 36rpx;
+  align-items: stretch;
+}
+
+.poster-box {
+  flex: 0.9;
+  min-height: 560rpx;
+  border: 1rpx solid #dbe8dd;
+  border-radius: 36rpx;
+  padding: 36rpx;
+  background: linear-gradient(180deg, #ffffff, #f7fbf8);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.poster-box.no-image .poster-image {
+  display: none;
+}
+
+.poster-image {
+  width: 100%;
+  min-height: 440rpx;
+  max-height: 920rpx;
+  border-radius: 36rpx;
+  background: rgba(255,255,255,0.75);
+}
+
+.poster-caption {
+  margin-top: 28rpx;
+  color: #6a786f;
+  font-size: 28rpx;
+  line-height: 1.8;
+  text-align: center;
+}
+
+.type-box {
+  flex: 1.1;
+  border: 1rpx solid #dbe8dd;
+  border-radius: 36rpx;
+  padding: 36rpx;
+  background: linear-gradient(180deg, #ffffff, #fbfdfb);
+  display: flex;
+  flex-direction: column;
+}
+
+.type-kicker {
+  font-size: 24rpx;
+  color: #4d6a53;
+  margin-bottom: 16rpx;
+  letter-spacing: 0.06em;
+}
+
+.type-name {
+  font-size: 60rpx;
+  line-height: 1.08;
+  letter-spacing: -0.03em;
+  color: #1e2a22;
+  font-weight: bold;
+}
+
+.match {
+  margin-top: 36rpx;
+  display: inline-flex;
+  align-items: center;
+  gap: 16rpx;
+  border-radius: 999rpx;
+  padding: 20rpx 28rpx;
+  background: #edf6ef;
+  border: 1rpx solid #dbe8dd;
+  color: #4d6a53;
+  font-weight: 700;
+  font-size: 28rpx;
+  line-height: 1.4;
+  align-self: flex-start;
+}
+
+.type-subname {
+  margin-top: 20rpx;
+  color: #6a786f;
+  font-size: 28rpx;
+  line-height: 1.8;
+}
+
+.analysis-box,
+.dim-box,
+.note-box {
+  border: 1rpx solid #dbe8dd;
+  border-radius: 36rpx;
+  padding: 36rpx;
+  background: linear-gradient(180deg, #ffffff, #fbfdfb);
+}
+
+.section-title {
+  font-size: 32rpx;
+  margin-bottom: 24rpx;
+  color: #1e2a22;
+  font-weight: bold;
+}
+
+.analysis-text {
+  margin: 0;
+  color: #304034;
+  font-size: 30rpx;
+  line-height: 1.9;
+}
+
+.dim-list {
+  display: flex;
+  flex-direction: column;
+  gap: 24rpx;
+}
+
+.dim-item {
+  border: 1rpx solid #dbe8dd;
+  border-radius: 32rpx;
+  padding: 28rpx;
+  background: #fff;
+}
+
+.dim-item-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 20rpx;
+  margin-bottom: 16rpx;
+  flex-wrap: wrap;
+}
+
+.dim-item-name {
+  font-size: 28rpx;
+  font-weight: 700;
+  color: #1e2a22;
+}
+
+.dim-item-score {
+  color: #4d6a53;
+  font-weight: 800;
+  font-size: 28rpx;
+  white-space: nowrap;
+}
+
+.dim-item-desc {
+  margin: 0;
+  color: #6a786f;
+  font-size: 26rpx;
+  line-height: 1.8;
+}
+
+.note-text {
+  margin: 0;
+  color: #6a786f;
+  font-size: 26rpx;
+  line-height: 1.8;
+}
+
+.result-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 24rpx;
+  flex-wrap: wrap;
+  margin-top: 44rpx;
+}
+
+/* 响应式适配 */
+@media (max-width: 860rpx) {
+  .result-top {
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 600rpx) {
+  .container {
+    padding: 28rpx 24rpx 84rpx;
+  }
+  
+  .hero, .test-wrap, .result-wrap {
+    padding: 32rpx;
+  }
+  
+  .hero-title {
+    font-size: 64rpx;
+  }
+  
+  .question-title {
+    font-size: 30rpx;
+  }
+}
