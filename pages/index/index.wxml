@@ -32,12 +32,12 @@
             </view>
             <text class="question-title">{{item.text}}</text>
             <view class="options">
-              <block wx:for="{{item.options}}" wx:for-item="opt" wx:key="value">
+              <block wx:for="{{item.options}}" wx:for-item="opt" wx:for-index="optIndex" wx:key="value">
                 <view class="option" bindtap="selectOption" data-qid="{{item.id}}" data-value="{{opt.value}}">
                   <view class="option-radio {{answers[item.id] === opt.value ? 'selected' : ''}}">
                     <view wx:if="{{answers[item.id] === opt.value}}" class="radio-inner"></view>
                   </view>
-                  <text class="option-code">{{['A', 'B', 'C', 'D'][index]}}</text>
+                  <text class="option-code">{{['A', 'B', 'C', 'D'][optIndex]}}</text>
                   <text class="option-text">{{opt.label}}</text>
                 </view>
               </block>

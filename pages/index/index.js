@@ -357,12 +357,7 @@ Page({
 
   startTest(e) {
     const preview = e && e.detail && e.detail.value ? true : false;
-    this.setData({
-      previewMode: preview,
-      answers: {},
-      currentScreen: 'test'
-    });
-
+    
     const shuffledRegular = this.shuffle(this.questions);
     const insertIndex = Math.floor(Math.random() * shuffledRegular.length) + 1;
     const shuffledQuestions = [
@@ -371,11 +366,15 @@ Page({
       ...shuffledRegular.slice(insertIndex)
     ];
 
-    this.setData({ shuffledQuestions }, () => {
+    this.setData({
+      previewMode: preview,
+      answers: {},
+      shuffledQuestions: shuffledQuestions,
+      currentScreen: 'test'
+    }, () => {
       this.renderQuestions();
+      wx.pageScrollTo({ scrollTop: 0, duration: 300 });
     });
-
-    wx.pageScrollTo({ scrollTop: 0, duration: 300 });
   },
 
   backToIntro() {
